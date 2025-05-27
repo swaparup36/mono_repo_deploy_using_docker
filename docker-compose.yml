@@ -13,7 +13,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: ./docker/Dockerfile.backend.dev
     container_name: backend_container
     environment:
       DATABASE_URL: postgres://postgres:mypass123@postgres:5432/postgres
@@ -25,23 +25,27 @@ services:
   ws:
     build:
       context: .
-      dockerfile: Dockerfile.ws
-      container_name: ws_container
+      dockerfile: ./docker/Dockerfile.ws.dev
+    container_name: ws_container
     environment:
       DATABASE_URL: postgres://postgres:mypass123@postgres:5432/postgres
     ports:
       - "8081:8081"
     depends_on:
       - postgres
+      - backend
 
   web:
     build:
       context: .
-      dockerfile: Dockerfile.web
-      container_name: web_container
+      dockerfile: ./docker/Dockerfile.web.dev
+      args:
+        DATABASE_URL: postgres://postgres:mypass123@postgres:5432/postgres
+    container_name: web_container
     environment:
       DATABASE_URL: postgres://postgres:mypass123@postgres:5432/postgres
     ports:
       - "3000:3000"
     depends_on:
       - postgres
+      - backend

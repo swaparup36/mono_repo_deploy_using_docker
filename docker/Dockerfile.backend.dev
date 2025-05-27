@@ -2,6 +2,10 @@ FROM oven/bun:1
 
 WORKDIR /usr/src/app
 
+RUN apt-get update -y && apt-get install -y openssl
+
+ARG DATABASE_URL
+
 COPY ./packages ./packages 
 COPY ./bun.lock ./bun.lock
 COPY ./package.json ./package.json
@@ -9,9 +13,11 @@ COPY ./turbo.json ./turbo.json
 
 COPY ./apps/backend ./apps/backend
 
+ENV DATABASE_URL=$DATABASE_URL
+
 RUN bun install
 RUN bun run db:generate
 
 EXPOSE 8080
 
-CMD ["bun", "run", "start:web"]
+CMD ["bun", "run", "dev:backend"]
