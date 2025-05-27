@@ -31,7 +31,7 @@ jobs:
           tags: swaparup/tut-todo-app-backend:${{ github.sha }}
       
       - name: Deploy to the VM
-        runs: |
+        run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           mkdir -p /home/runner/.ssh
           chmod 700 /home/runner/ssh_key
