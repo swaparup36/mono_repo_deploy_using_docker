@@ -1,0 +1,47 @@
+version: "8.5"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypass123
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: backend_container
+    environment:
+      DATABASE_URL: postgres://postgres:mypass123@postgres:5432/postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  ws:
+    build:
+      context: .
+      dockerfile: Dockerfile.ws
+      container_name: ws_container
+    environment:
+      DATABASE_URL: postgres://postgres:mypass123@postgres:5432/postgres
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      container_name: web_container
+    environment:
+      DATABASE_URL: postgres://postgres:mypass123@postgres:5432/postgres
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
