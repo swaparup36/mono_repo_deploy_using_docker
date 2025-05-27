@@ -2,7 +2,7 @@
 ## Push the dcoker image to dockerhub
 ## SSH into our VM and start the new image
 
-name: Deploy the web
+name: Deploy the web app
 on:
   push:
     branches:
